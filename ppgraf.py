@@ -10,61 +10,70 @@ df["Depressed"] = df["Depressed"].fillna("None")
 st.title("Números que contam histórias")
 st.write("Laboratório de Estatísticas II - Projeto de Grupo")
 
-# - - - -
-
-
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
+#::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
 
 # GRÁFICO DE DEPRESSED, escolha do nível de depressão
 
-st.header("Gráfico de Barras - Idade, Género e Depressão")
+st.header("Gráfico de Barras - Género, Faixa Etária e Depressão")
 
+# Criar caixa de seleção
 estado = st.selectbox(
     "Escolhe o estado de Depressão:",
     ["None", "Several", "Most"]
 )
 
-df_filtrado = df[df["Depressed"] == estado]
+
+df_filtro = df[df["Depressed"] == estado]
 
 # Ordem correta das idades
-age_order = [
+ordem_faixa_etaria = [
     "18-19", "20-29", "30-39", "40-49",
     "50-59", "60-69", "70-79", "80+"
 ]
 
-# Cores estilo R
-palette = {
+# Cor das barras
+cor_das_barras = {
     "female": "#F06292",
     "male": "#64B5F6"
 }
 
-df_filtrado = df[df["Depressed"] == estado]
+# Contar "female" e "male"
+total_female = len(df_filtro[df_filtro["Gender"] == "female"])
+total_male = len(df_filtro[df_filtro["Gender"] == "male"])
 
-total_female = len(df_filtrado[df_filtrado["Gender"] == "female"])
-total_male = len(df_filtrado[df_filtrado["Gender"] == "male"])
 
+# Criar espaço para o gráfico
 fig, ax = plt.subplots()
 
+# Criar gráfico de barras
 sns.countplot(
-    data=df_filtrado,
-    x="AgeDecade",
-    hue="Gender",
-    order=age_order,
-    hue_order=["female", "male"],
-    palette=palette,
-    linewidth=1,
-    edgecolor="black",
-    ax=ax
+    data = df_filtro, # dataframe
+    x = "AgeDecade", # eixo x
+    hue = "Gender", # dividir barras por gênero
+    order = ordem_faixa_etaria, # ordem das barras
+    hue_order = ["female", "male"], # ordem do gênero
+    palette = cor_das_barras, # cores das barras
+    linewidth = 1, # borda
+    edgecolor = "black", # cor da borda
+    ax = ax # desenhar o gráfico
 )
 
 ax.set_title(f"Distribuição por Idade e Género (Depressed = {estado})")
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
+# Dividir a página em 2 (colunas)
 col1, col2 = st.columns([4.5, 0.8])
 
+# Coluna do gráfico
 with col1:
     st.pyplot(fig)
 
+# Coluna do total
 with col2:
     st.info(f"Mulheres: {total_female}")
     st.info(f"Homens: {total_male}")
@@ -82,34 +91,34 @@ with col2:
 
 st.title("Idade, Depressão e Idade ao ter o Primeiro Bebé")
 
-
-df["Depressed"] = df["Depressed"].fillna("None").astype(str).str.strip()
+# Remover NA's
 df = df.dropna(subset=["Age1stBaby"])
 df["Age1stBaby"] = df["Age1stBaby"].astype(int)
 
-estado = st.selectbox(
+# Criar caixa de seleção
+estado_2 = st.selectbox(
     "Estado de Depressão:",
     ["None", "Several", "Most"]
 )
 
-idade_bebe = st.slider(
+# Criar linha para selecionar a idade
+idade_ao_ter_o_primeiro_filho = st.slider(
     "Idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=30
+    value=30 # ponto que aparece na 1ªvez
 )
 
-# ✅ Apenas mulheres
-
-df_filtrado = df[
-    (df["Depressed"] == estado) &
-    (df["Age1stBaby"] == idade_bebe) &
+df_filtro_2 = df[
+    (df["Depressed"] == estado_2) &
+    (df["Age1stBaby"] == idade_ao_ter_o_primeiro_filho) &
     (df["Gender"] == "female")
 ]
 
-# ✅ TOTAL (igual ao gráfico 3)
-total = len(df_filtrado)
+# Contar todos os casos do filtro
+total = len(df_filtro)
 
+# 
 age_order = [
     "18-19", "20-29", "30-39", "40-49",
     "50-59", "60-69", "70-79", "80+"
@@ -119,23 +128,22 @@ age_order = [
 fig, ax = plt.subplots()
 
 sns.countplot(
-    data=df_filtrado,
-    x="AgeDecade",
-    order=age_order,
-    color="#F06292",
-    edgecolor="black",
-    linewidth=1,
-    ax=ax
+    data = df_filtro_2,
+    x = "AgeDecade",
+    order = age_order,
+    color = "#F06292",
+    edgecolor = "black",
+    linewidth = 1,
+    ax = ax
 )
 
-# ✅ Legenda manual (apenas female)
-ax.legend(
-    ["female"],
-    title="Gender",
-    loc="upper right"
+# Aparecer apenas female na legenda
+ax.legend(["female"],
+    title = "Gender", 
+    loc = "upper right"
 )
 
-ax.set_title(f"Depressed = {estado} | Age1stBaby = {idade_bebe}")
+ax.set_title(f"Depressed = {estado_2} | Age1stBaby = {idade_bebe}")
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
@@ -149,7 +157,7 @@ with col2:
     st.info(f"{total}")
 
 # BOXPLOT
-st.header("Boxplot da Depressão por Idade ao Ter o Primeiro Filho")
+st.header("Boxplot da Depressão por Idade ao ter o Primeiro Filho")
 
 # -------- Preparação dos dados --------
 df_box = df[
@@ -177,7 +185,7 @@ sns.boxplot(
 )
 
 ax.set_xlabel("Estado de Depressão")
-ax.set_ylabel("Idade ao Ter o Primeiro Filho")
+ax.set_ylabel("Idade ao ter o Primeiro Filho")
 
 st.pyplot(fig)
 
@@ -282,7 +290,7 @@ with col2:
 # BOXPLOT
 
 
-st.header("Boxplot da Idade ao Ter o Primeiro Filho por Nível de Escolaridade")
+st.header("Boxplot da Idade ao ter o Primeiro Filho por Nível de Escolaridade")
 
 # Apenas mulheres e valores válidos
 df_box = df[
@@ -315,7 +323,7 @@ sns.boxplot(
 )
 
 ax.set_xlabel("Nível de Escolaridade")
-ax.set_ylabel("Idade ao Ter o Primeiro Filho")
+ax.set_ylabel("Idade ao ter o Primeiro Filho")
 
 st.pyplot(fig)
 
