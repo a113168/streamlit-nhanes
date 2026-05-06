@@ -96,7 +96,7 @@ df = df.dropna(subset=["Age1stBaby"])
 df["Age1stBaby"] = df["Age1stBaby"].astype(int)
 
 # Criar caixa de seleção
-estado_2 = st.selectbox(
+estado = st.selectbox(
     "Estado de Depressão:",
     ["None", "Several", "Most"]
 )
@@ -109,8 +109,8 @@ idade_ao_ter_o_primeiro_filho = st.slider(
     value=30 # ponto que aparece na 1ªvez
 )
 
-df_filtro_2 = df[
-    (df["Depressed"] == estado_2) &
+df_filtro = df[
+    (df["Depressed"] == estado) &
     (df["Age1stBaby"] == idade_ao_ter_o_primeiro_filho) &
     (df["Gender"] == "female")
 ]
@@ -128,22 +128,23 @@ age_order = [
 fig, ax = plt.subplots()
 
 sns.countplot(
-    data = df_filtro_2,
-    x = "AgeDecade",
-    order = age_order,
-    color = "#F06292",
-    edgecolor = "black",
-    linewidth = 1,
-    ax = ax
+    data=df_filtrado,
+    x="AgeDecade",
+    order=age_order,
+    color="#F06292",
+    edgecolor="black",
+    linewidth=1,
+    ax=ax
 )
 
-# Aparecer apenas female na legenda
-ax.legend(["female"],
-    title = "Gender", 
-    loc = "upper right"
+# ✅ Legenda manual (apenas female)
+ax.legend(
+    ["female"],
+    title="Gender",
+    loc="upper right"
 )
 
-ax.set_title(f"Depressed = {estado_2} | Age1stBaby = {idade_bebe}")
+ax.set_title(f"Depressed = {estado} | Age1stBaby = {idade_bebe}")
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
