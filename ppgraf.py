@@ -91,34 +91,32 @@ with col2:
 
 st.title("Idade, Depressão e Idade ao ter o Primeiro Bebé")
 
-# Remover NA's
 df = df.dropna(subset=["Age1stBaby"])
 df["Age1stBaby"] = df["Age1stBaby"].astype(int)
 
-# Criar caixa de seleção
 estado = st.selectbox(
     "Estado de Depressão:",
     ["None", "Several", "Most"]
 )
 
-# Criar linha para selecionar a idade
-idade_ao_ter_o_primeiro_filho = st.slider(
+idade_bebe = st.slider(
     "Idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=30 # ponto que aparece na 1ªvez
+    value=30
 )
 
-df_filtro = df[
+# ✅ Apenas mulheres
+
+df_filtrado = df[
     (df["Depressed"] == estado) &
-    (df["Age1stBaby"] == idade_ao_ter_o_primeiro_filho) &
+    (df["Age1stBaby"] == idade_bebe) &
     (df["Gender"] == "female")
 ]
 
-# Contar todos os casos do filtro
-total = len(df_filtro)
+# ✅ TOTAL (igual ao gráfico 3)
+total = len(df_filtrado)
 
-# 
 age_order = [
     "18-19", "20-29", "30-39", "40-49",
     "50-59", "60-69", "70-79", "80+"
