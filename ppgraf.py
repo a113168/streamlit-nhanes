@@ -18,7 +18,7 @@ st.write("Laboratório de Estatísticas II - Projeto de Grupo")
 
 # GRÁFICO DE DEPRESSED, escolha do nível de depressão
 
-st.header("Gráfico de Barras - Género, Faixa Etária e Depressão")
+st.header("Relação - Género e Depressão")
 
 # Criar caixa de seleção
 estado = st.selectbox(
@@ -62,7 +62,7 @@ sns.countplot(
     ax = ax # desenhar o gráfico
 )
 
-ax.set_title(f"Distribuição por Idade e Género (Depressed = {estado})")
+ax.set_title(f"Depressed = {estado}")
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
@@ -89,7 +89,7 @@ with col2:
 
 # Gráfico 2
 
-st.title("Idade, Depressão e Idade ao ter o Primeiro Bebé")
+st.header("Relação - Depressão e Idade ao ter o primeiro filho")
 
 df = df.dropna(subset=["Age1stBaby"])
 df["Age1stBaby"] = df["Age1stBaby"].astype(int)
@@ -103,7 +103,7 @@ idade_bebe = st.slider(
     "Idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=30
+    value=14
 )
 
 # ✅ Apenas mulheres
@@ -117,8 +117,7 @@ df_filtrado = df[
 # ✅ TOTAL (igual ao gráfico 3)
 total = len(df_filtrado)
 
-age_order = [
-    "18-19", "20-29", "30-39", "40-49",
+age_order = ["20-29", "30-39", "40-49",
     "50-59", "60-69", "70-79", "80+"
 ]
 
@@ -153,7 +152,7 @@ with col1:
     st.pyplot(fig)
 
 with col2:
-    st.info(f"{total}")
+    st.info(f"Mulheres: {total}")
 
 # BOXPLOT
 st.header("Boxplot da Depressão por Idade ao ter o Primeiro Filho")
@@ -195,9 +194,7 @@ st.pyplot(fig)
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
 
-# Gráfico 3
-
-st.title("Faixa Etária, Educação e Idade do Primeiro Bebé")
+st.header("Relação - Educação e Idade ao ter o primeiro filho")
 
 # Ler dados
 df = pd.read_csv("df_NHANES.csv", sep=";")
@@ -238,7 +235,7 @@ idade_bebe = st.slider(
     "Idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=30,
+    value=14,
     key="age1stbaby_slider"
 )
 
@@ -284,12 +281,12 @@ with col1:
     st.pyplot(fig)
 
 with col2:
-    st.info(f"{total}")
+    st.info(f"Mulheres: {total}")
 
 # BOXPLOT
 
 
-st.header("Boxplot da Idade ao ter o Primeiro Filho por Nível de Escolaridade")
+st.header("Boxplot do Nível de Escolaridade por Idade ao ter o Primeiro Filho")
 
 # Apenas mulheres e valores válidos
 df_box = df[
@@ -316,7 +313,7 @@ sns.boxplot(
     x="Education",
     y="Age1stBaby",
     order=education_order,
-    color="#F48FB1",          # rosa claro (estilo R)
+    color="#F48FB1",
     linewidth=1.2,
     ax=ax
 )
