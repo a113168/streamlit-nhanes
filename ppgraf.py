@@ -79,7 +79,7 @@ with col2:
     st.info(f"Homens: {total_male}")
 
 
-st.text("Há mais pessoas do género masculino sem depressão, já nos outros dois estados de depressão analisados, o género feminino destaca-se")
+st.text("Há mais pessoas do género masculino sem depressão, já nos outros dois estados de depressão analisados, o género feminino destaca-se.")
 
 
 
@@ -190,7 +190,7 @@ ax.set_ylabel("Idade ao ter o Primeiro Filho")
 
 st.pyplot(fig)
 
-st.text("O género feminino quando mais cedo tem o seu primeiro filho, tende a ter um estado de depressão maior")
+st.text("O género feminino quando mais cedo tem o seu primeiro filho, tende a ter um estado de depressão maior.")
 
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
@@ -328,7 +328,7 @@ ax.set_ylabel("Idade ao ter o Primeiro Filho")
 
 st.pyplot(fig)
 
-st.text("O género feminino quanto tem um maior nível de escolaridade, mais tarde tem o seu primeiro filho")
+st.text("O género feminino quanto tem um maior nível de escolaridade, mais tarde tem o seu primeiro filho.")
 
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::#
