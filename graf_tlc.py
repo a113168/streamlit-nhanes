@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import norm
 
 st.title("Teorema do Limite Central")
 
