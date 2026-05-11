@@ -102,25 +102,27 @@ estado = st.selectbox(
     ["None", "Several", "Most"]
 )
 
-idade_bebe = st.slider(
-    "Idade ao ter o primeiro bebé:",
+# ✅ SLIDER DE INTERVALO (duas bolas)
+intervalo_idade = st.slider(
+    "Intervalo de idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=14
+    value=(20, 30)   # intervalo inicial
 )
 
-# ✅ Apenas mulheres
-
+# ✅ Apenas mulheres + intervalo
 df_filtrado = df[
     (df["Depressed"] == estado) &
-    (df["Age1stBaby"] == idade_bebe) &
+    (df["Age1stBaby"] >= intervalo_idade[0]) &
+    (df["Age1stBaby"] <= intervalo_idade[1]) &
     (df["Gender"] == "female")
 ]
 
-# ✅ TOTAL (igual ao gráfico 3)
+# ✅ TOTAL
 total = len(df_filtrado)
 
-age_order = ["20-29", "30-39", "40-49",
+age_order = [
+    "20-29", "30-39", "40-49",
     "50-59", "60-69", "70-79", "80+"
 ]
 
@@ -144,11 +146,13 @@ ax.legend(
     loc="upper right"
 )
 
-ax.set_title(f"Depressed = {estado} | Age1stBaby = {idade_bebe}")
+ax.set_title(
+    f"Depressed = {estado} | Age1stBaby entre {intervalo_idade[0]} e {intervalo_idade[1]}"
+)
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
-# ✅ Layout igual ao gráfico 3 (gráfico + total)
+# ✅ Layout igual ao gráfico 3
 col1, col2 = st.columns([4.5, 0.8])
 
 with col1:
@@ -208,11 +212,10 @@ df = pd.read_csv("df_NHANES.csv", sep=";")
 df = df.dropna(subset=["Age1stBaby", "Education"])
 df["Age1stBaby"] = df["Age1stBaby"].astype(int)
 
-# Apenas mulheres (Age1stBaby faz sentido)
+# Apenas mulheres
 df = df[df["Gender"] == "female"]
 
 # ---- CONTROLOS ----
-
 
 education_order = [
     "8th Grade",
@@ -234,21 +237,20 @@ educacao = st.selectbox(
     key="education_select"
 )
 
-
-
-idade_bebe = st.slider(
-    "Idade ao ter o primeiro bebé:",
+# ✅ SLIDER DE INTERVALO
+intervalo_idade = st.slider(
+    "Intervalo de idade ao ter o primeiro bebé:",
     min_value=int(df["Age1stBaby"].min()),
     max_value=int(df["Age1stBaby"].max()),
-    value=14,
-    key="age1stbaby_slider"
+    value=(20, 30),
+    key="age1stbaby_interval"
 )
 
-
-# Filtro
+# ✅ FILTRO COM INTERVALO
 df_filtrado = df[
     (df["Education"] == educacao) &
-    (df["Age1stBaby"] == idade_bebe)
+    (df["Age1stBaby"] >= intervalo_idade[0]) &
+    (df["Age1stBaby"] <= intervalo_idade[1])
 ]
 
 # Total de contagem
@@ -268,19 +270,21 @@ sns.countplot(
 )
 
 ax.set_title(
-    f"Education = {educacao} | Age1stBaby = {idade_bebe}"
+    f"Education = {educacao} | Age1stBaby entre {intervalo_idade[0]} e {intervalo_idade[1]}"
 )
+
 # ✅ Legenda manual (apenas female)
 ax.legend(
     ["female"],
     title="Gender",
     loc="upper right"
 )
+
 ax.set_xlabel("Faixa Etária")
 ax.set_ylabel("Contagem")
 
 # Layout lado a lado
-col1, col2 = st.columns([4.5, 0.8]) # perporções do gráfico e caixa de texto
+col1, col2 = st.columns([4.5, 0.8])
 
 with col1:
     st.pyplot(fig)
